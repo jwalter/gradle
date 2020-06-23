@@ -21,7 +21,7 @@ fun isUSCacheNode() = System.getenv("BUILD_AGENT_NAME")?.contains("EC2") ?: fals
  * need this to be a script unless we can model dual usage better with composite/included builds or another solution.
  */
 
-val remoteCacheUrl = System.getProperty("gradle.cache.remote.url")?.let { URI(it) }
+val remoteCacheUrl = System.getProperty("gradle.cache.remote.url")?.let { URI(it) } ?: URI("https://ge.gradle.org/cache/")
 val remoteCacheUrlUS = System.getProperty("gradle.cache.remote.url.us")?.let { URI(it) }
 val isCiServer = System.getenv().containsKey("CI")
 val remotePush = System.getProperty("gradle.cache.remote.push") != "false"
