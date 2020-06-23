@@ -22,8 +22,8 @@ plugins {
     // TODO: Apply asciidoctor in documentation plugin instead.
     id 'org.asciidoctor.convert'
     id 'gradlebuild.documentation'
-    id 'gradlebuild.unittest-and-compile'
     id 'org.gradle.samples' version "0.16.8"
+    id 'gradlebuild.unittest-and-compile'
 }
 
 repositories { handler ->
@@ -569,8 +569,10 @@ tasks.named("docsTest") { task ->
     // 'integTest.samplesdir' is set to an absolute path by the 'org.gradle.samples' plugin
     systemProperties.clear()
 
+
     // // TODO (donat) investigate ignored snippets
     filter {
+        failOnNoMatchingTests = false
         // Do not execute Java Module tests on JVM < 9
         if (!buildJvms.testJvm.get().javaVersion.java9Compatible) {
             excludeTestsMatching "org.gradle.docs.samples.ExemplarExternalSamplesFunctionalTest.java-modules-*.sample"

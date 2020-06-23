@@ -16,7 +16,12 @@
 
 package common
 
-import Gradle_Check.configurations.allBranchesFilter
+import DistributedTest.configurations.allBranchesFilter
+import configurations.BuildDistributions
+import configurations.CompileAll
+import configurations.Gradleception
+import configurations.PerformanceTestCoordinator
+import configurations.SanityCheck
 import configurations.m2CleanScriptUnixLike
 import configurations.m2CleanScriptWindows
 import jetbrains.buildServer.configs.kotlin.v2019_2.AbsoluteId
@@ -30,6 +35,12 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.Requirements
 import jetbrains.buildServer.configs.kotlin.v2019_2.VcsSettings
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.GradleBuildStep
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.script
+
+fun BuildType.isLinuxBuild()  = (name.toLowerCase().contains("linux") ||
+        this is CompileAll ||
+        this is SanityCheck ||
+        this is Gradleception ||
+        this is BuildDistributions) && (this !is PerformanceTestCoordinator)
 
 fun BuildSteps.customGradle(init: GradleBuildStep.() -> Unit, custom: GradleBuildStep.() -> Unit): GradleBuildStep =
     GradleBuildStep(init)
@@ -58,7 +69,7 @@ fun VcsSettings.filterDefaultBranch() {
     branchFilter = allBranchesFilter
 }
 
-fun BuildType.applyDefaultSettings(os: Os = Os.linux, timeout: Int = 30, vcsRoot: String = "Gradle_Branches_GradlePersonalBranches") {
+fun BuildType.applyDefaultSettings(os: Os = Os.linux, timeout: Int = 30, vcsRoot: String = "DistributedTest_DistributedTest") {
     artifactRules = """
         build/report-* => .
         buildSrc/build/report-* => .

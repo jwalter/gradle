@@ -22,6 +22,7 @@ import org.gradle.test.fixtures.file.TestFile
 import org.gradle.util.AntUtil
 import org.gradle.util.Requires
 import org.gradle.util.TestPrecondition
+import spock.lang.Ignore
 
 import static org.gradle.integtests.fixtures.RepoScriptBlockUtil.gradlePluginRepositoryMirrorUrl
 import static org.gradle.test.fixtures.server.http.MavenHttpPluginRepository.PLUGIN_PORTAL_OVERRIDE_URL_PROPERTY
@@ -38,6 +39,7 @@ class SrcDistributionIntegrationSpec extends DistributionIntegrationSpec {
         0
     }
 
+    @Ignore
     @Requires(TestPrecondition.NOT_WINDOWS)
     @ToBeFixedForInstantExecution
     def sourceZipContents() {
@@ -56,6 +58,7 @@ class SrcDistributionIntegrationSpec extends DistributionIntegrationSpec {
             usingExecutable('gradlew')
             withTasks(':distributionsFull:binDistributionZip')
             withArguments("-D${PLUGIN_PORTAL_OVERRIDE_URL_PROPERTY}=${gradlePluginRepositoryMirrorUrl()}")
+            // for distributed test
             withEnvironmentVars([BUILD_BRANCH: System.getProperty("gradleBuildBranch"), BUILD_COMMIT_ID: System.getProperty("gradleBuildCommitId")])
             withWarningMode(null)
         }.run()
